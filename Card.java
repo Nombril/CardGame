@@ -1,7 +1,7 @@
 /**
  * Card.java
  *
- * <code>Card</code> represents a playing card.
+ * <code>Card</code> represents a playing card.  
  */
 public class Card {
 
