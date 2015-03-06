@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * The Deck class represents a shuffled deck of cards.
  * It provides several operations including
- *      initialize, shuffle, deal, and check if empty.
+ *    initialize, shuffle, deal, and check if empty.
  */
 public class Deck {
 
