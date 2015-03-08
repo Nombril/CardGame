@@ -35,7 +35,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	/** Column (x coord) of the upper left corner of the first card. */
 	private static final int LAYOUT_LEFT = 30;
 	/** Distance between the upper left x coords of
-	 *  two horizonally adjacent cards. */
+	 *  two horizontally adjacent cards. */
 	private static final int LAYOUT_WIDTH_INC = 100;
 	/** Distance between the upper left y coords of
 	 *  two vertically adjacent cards. */
