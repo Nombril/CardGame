@@ -309,10 +309,8 @@ public class CardGameGUI extends JFrame implements ActionListener {
 			getRootPane().setDefaultButton(replaceButton);
 			winMsg.setVisible(false);
 			lossMsg.setVisible(false);
-			if (!board.anotherPlayIsPossible()) {
-				signalLoss();
-				lossMsg.setVisible(true);
-			}
+			while(!board.anotherPlayIsPossible())
+				board.newGame();
 			for (int i = 0; i < selections.length; i++) {
 				selections[i] = false;
 			}
