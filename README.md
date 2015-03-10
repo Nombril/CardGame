@@ -19,6 +19,7 @@ Add one or more games.  Suggestions:
 
 Change the GUI to:
 
+Add ability for users to change card style
 << Add suggestions here >>
 
 Other features we should to add:
