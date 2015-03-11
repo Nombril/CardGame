@@ -15,6 +15,7 @@ Goals:
 
 Add one or more games.  Suggestions:
 
+Game of Rit
 Magic the Gathering
 War
 52 Pickup
