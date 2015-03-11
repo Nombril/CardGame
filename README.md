@@ -15,7 +15,10 @@ Goals:
 
 Add one or more games.  Suggestions:
 
-<< Add Some Here >>
+Magic the Gathering
+War
+52 Pickup
+Egyptian Ratscrew
 
 Change the GUI to:
 
