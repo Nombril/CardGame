@@ -20,7 +20,7 @@ public class Card {
 	 */
 	private int pointValue;
 
-
+//	Sick nasty code
    /**
 	 * Creates a new <code>Card</code> instance.
 	 *
