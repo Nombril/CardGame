@@ -15,7 +15,7 @@ Goals:
 
 Add one or more games.  Suggestions:
 
-Game of Rit                 \
+Game of Matt                 \
 Magic the Gathering         |
 War                         > xXSWAGGGYCODER360Xx
 52 Pickup					|
