@@ -16,7 +16,7 @@ Goals:
 Add one or more games.  Suggestions:
 
 Game of Matt     
-Concentration/Memory\
+Concentration/Memory of dank memes\
 Magic the Gathering         |
 War                         > xXSWAGGGYCODER360Xx
 52 Pickup					|
