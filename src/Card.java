@@ -19,7 +19,7 @@ public class Card {
 	 * int value that holds the point value.
 	 */
 	private int pointValue;
-
+//sick nasty code b4 this i came first
 //	Sick nasty code
    /**
 	 * Creates a new <code>Card</code> instance.
