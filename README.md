@@ -28,4 +28,6 @@ Add ability for users to change card style
 
 Other features we should to add:
 
+Add different card pictures so we don't have to use traditional number cards
+
 << Add suggestions here >>
