@@ -15,11 +15,11 @@ Goals:
 
 Add one or more games.  Suggestions:
 
-Game of Rit
-Magic the Gathering
-War
-52 Pickup
-Egyptian Ratscrew
+Game of Rit                 \
+Magic the Gathering         |
+War                         > xXSWAGGGYCODER360Xx
+52 Pickup					|
+Egyptian Ratscrew			/
 
 Change the GUI to:
 
