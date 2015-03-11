@@ -131,8 +131,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		for (int k = 0; k < board.size(); k++) {
 			String cardImageFileName =
 				imageFileName(board.cardAt(k), selections[k]);
-			URL imageURL = getClass().getResource(cardImageFileName);
-			if (imageURL != null) {
+			/*Card Images URL*/			URL imageURL = getClass().getResource(cardImageFileName);			if (imageURL != null) {
 				ImageIcon icon = new ImageIcon(imageURL);
 				displayCards[k].setIcon(icon);
 				displayCards[k].setVisible(true);
@@ -205,6 +204,8 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		restartButton.setBounds(BUTTON_LEFT, BUTTON_TOP + BUTTON_HEIGHT_INC,
 										100, 30);
 		restartButton.addActionListener(this);
+		
+		//TODO Add a button to change card looks
 
 		statusMsg = new JLabel(
 			board.deckSize() + " undealt cards remain.");
@@ -280,6 +281,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 * @param e the button click action event
 	 */
 	public void actionPerformed(ActionEvent e) {
+		//TODO Add change card look button action receiver here
 		if (e.getSource().equals(replaceButton)) {
 			// Gather all the selected cards.
 			List<Integer> selection = new ArrayList<Integer>();
