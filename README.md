@@ -13,6 +13,8 @@ Thirteens:  working
 
 Goals:
 
+Add stuff to the wiki. 
+
 Add one or more games.  Suggestions:
 
 Game of Matt     
@@ -21,6 +23,7 @@ Magic the Gathering         |
 War                         > xXSWAGGGYCODER360Xx
 52 Pickup					|
 Egyptian Ratscrew			/
+More game ideas at http://www.wolframalpha.com/input/?i=mathworld%20subject%20card%20games
 
 Change the GUI to:
 
@@ -30,5 +33,5 @@ Add ability for users to change card style
 Other features we should to add:
 
 Add different card pictures so we don't have to use traditional number cards.
-
+Animations?
 << Add suggestions here >>
