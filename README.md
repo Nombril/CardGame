@@ -38,4 +38,9 @@ Other features we should to add:
 Add different card pictures so we don't have to use traditional number cards.
 
 Animations?
+
+High Scores
+
+Global Internet High Score List
+
 << Add suggestions here >>
