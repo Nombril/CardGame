@@ -11,9 +11,7 @@ Elevens: working
 
 Thirteens:  working
 
-Goals:
-
-Make the README easier to read. 
+###Goals:
 
 Add stuff to the wiki. 
 
@@ -28,12 +26,12 @@ Egyptian Ratscrew			/
 
 More game ideas at http://www.wolframalpha.com/input/?i=mathworld%20subject%20card%20games
 
-Change the GUI to:
+###Change the GUI to:
 
 Add ability for users to change card style
 << Add suggestions here >>
 
-Other features we should to add:
+###Other features we should to add:
 
 Add different card pictures so we don't have to use traditional number cards.
 
