@@ -8,17 +8,17 @@ import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.ArrayList;
 
 /**
@@ -88,6 +88,8 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	private int totalGames;
 	/** The currently selected style. */
 	String style = "default";
+	/** ConcurrentHashMap containing buffered card images. */
+	ConcurrentHashMap<String, BufferedImage> bufferedImages = new ConcurrentHashMap<String, BufferedImage>(52);
 	
 	/**
 	 * Initialize the GUI.
@@ -134,21 +136,38 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 */
 	public void repaint() {
 		for (int k = 0; k < board.size(); k++) {
-			String cardImageFileName =
-					imageFileName(board.cardAt(k), selections[k]);
-			/*Card Images URL*/			try
-			{
-				String imageURL = cardImageFileName;
-				ImageIcon icon = new ImageIcon(imageURL);
-				displayCards[k].setIcon(icon);
-				displayCards[k].setVisible(true);
+			Card c= board.cardAt(k);
+			boolean selected = selections[k];
+			String cardImageFileName = imageFileName(c, selected);
+			String cardDesc = style+'\uFEFF'+c.suit()+'\uFEFF'+c.rank()+'\uFEFF'+(selected?"S":"");
+			BufferedImage bufImg = null;
+			if(bufferedImages.containsKey(cardDesc))
+				bufImg = bufferedImages.get(cardImageFileName);
+			if(bufImg==null){
+				try{
+					bufImg = ImageIO.read(new File(cardImageFileName));
+					if(selected)
+					{
+						for(int y=0; y<bufImg.getHeight(); ++y)
+							for(int x=0; x<bufImg.getWidth(); ++x)
+								bufImg.setRGB(x, y, 0xFFFFFF - bufImg.getRGB(x, y));
+					}
+					bufferedImages.put(cardDesc, bufImg);
+				}catch(Exception e){
+					new Error("Card image not found: \""
+							+ cardImageFileName + "\"", e).printStackTrace();
+					System.exit(-1);
+				}
 			}
-			catch(Exception e)
-			{
+			if(bufImg==null){
 				new Error("Card image not found: \""
-						+ cardImageFileName + "\"", e).printStackTrace();
+						+ cardImageFileName + "\"").printStackTrace();
 				System.exit(-1);
-			}		}
+			}
+			ImageIcon icon = new ImageIcon(bufImg);
+			displayCards[k].setIcon(icon);
+			displayCards[k].setVisible(true);
+		}
 		statusMsg.setText(board.deckSize()
 				+ " undealt cards remain.");
 		statusMsg.setVisible(true);
@@ -256,9 +275,8 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	
 	/**
 	 * Returns the image that corresponds to the input card.
-	 * Image names have the format "[Rank][Suit].GIF" or "[Rank][Suit]S.GIF",
-	 * for example "aceclubs.GIF" or "8heartsS.GIF". The "S" indicates that
-	 * the card is selected.
+	 * Image names have the format "[Rank][Suit].GIF",
+	 * for example "aceclubs.GIF".
 	 *
 	 * @param c Card to get the image for
 	 * @param isSelected flag that indicates if the card is selected
@@ -269,8 +287,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 			return "src/cards/backs/back1.GIF";
 		// constructs the String, example: "cards/styles/default/normal/acespades.GIF"
 		String str = "src/cards/styles/" + style + "/"
-				+ (isSelected ? "selected" : "normal")
-				+ "/" +  c.rank() + c.suit() + ".GIF";
+				+  c.rank() + c.suit() + ".GIF";
 		return str;
 	}
 	
