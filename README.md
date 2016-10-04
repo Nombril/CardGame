@@ -5,7 +5,7 @@ Starting point:
 
 Classes for:  << Fill this in >>
 
-GUI that can launch only one game
+GUI that can launch only one game: Done
 
 Elevens: working
 

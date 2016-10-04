@@ -1,3 +1,4 @@
+package game;
 import java.awt.Point;
 import java.awt.Graphics;
 import java.awt.Dimension;
@@ -13,6 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.ArrayList;
  * This class provides a GUI for solitaire games related to Elevens.
  */
 public class CardGameGUI extends JFrame implements ActionListener {
-
+	
 	/** Height of the game frame. */
 	private static final int DEFAULT_HEIGHT = 302;
 	/** Width of the game frame. */
@@ -53,10 +57,10 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	/** Distance between the tops of the "n undealt cards" and
 	 *  the "You lose/win" labels. */
 	private static final int LABEL_HEIGHT_INC = 35;
-
+	
 	/** The board (Board subclass). */
 	private Board board;
-
+	
 	/** The main panel containing the game components. */
 	private JPanel panel;
 	/** The Replace button. */
@@ -75,15 +79,16 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	private JLabel lossMsg;
 	/** The coordinates of the card displays. */
 	private Point[] cardCoords;
-
+	
 	/** kth element is true iff the user has selected card #k. */
 	private boolean[] selections;
 	/** The number of games won. */
 	private int totalWins;
 	/** The number of games played. */
 	private int totalGames;
-
-
+	/** The currently selected style. */
+	String style = "default";
+	
 	/**
 	 * Initialize the GUI.
 	 * @param gameBoard is a <code>Board</code> subclass.
@@ -92,7 +97,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		board = gameBoard;
 		totalWins = 0;
 		totalGames = 0;
-
+		
 		// Initialize cardCoords using 5 cards per row
 		cardCoords = new Point[board.size()];
 		int x = LAYOUT_LEFT;
@@ -106,13 +111,13 @@ public class CardGameGUI extends JFrame implements ActionListener {
 				x += LAYOUT_WIDTH_INC;
 			}
 		}
-
+		
 		selections = new boolean[board.size()];
 		initDisplay();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		repaint();
 	}
-
+	
 	/**
 	 * Run the game.
 	 */
@@ -123,33 +128,37 @@ public class CardGameGUI extends JFrame implements ActionListener {
 			}
 		});
 	}
-
+	
 	/**
 	 * Draw the display (cards and messages).
 	 */
 	public void repaint() {
 		for (int k = 0; k < board.size(); k++) {
 			String cardImageFileName =
-				imageFileName(board.cardAt(k), selections[k]);
-			/*Card Images URL*/			URL imageURL = getClass().getResource(cardImageFileName);			if (imageURL != null) {
+					imageFileName(board.cardAt(k), selections[k]);
+			/*Card Images URL*/			try
+			{
+				String imageURL = cardImageFileName;
 				ImageIcon icon = new ImageIcon(imageURL);
 				displayCards[k].setIcon(icon);
 				displayCards[k].setVisible(true);
-			} else {
-				throw new RuntimeException(
-					"Card image not found: \"" + cardImageFileName + "\"");
 			}
-		}
+			catch(Exception e)
+			{
+				new Error("Card image not found: \""
+						+ cardImageFileName + "\"", e).printStackTrace();
+				System.exit(-1);
+			}		}
 		statusMsg.setText(board.deckSize()
-			+ " undealt cards remain.");
+				+ " undealt cards remain.");
 		statusMsg.setVisible(true);
 		totalsMsg.setText("You've won " + totalWins
-			 + " out of " + totalGames + " games.");
+				+ " out of " + totalGames + " games.");
 		totalsMsg.setVisible(true);
 		pack();
 		panel.repaint();
 	}
-
+	
 	/**
 	 * Initialize the display.
 	 */
@@ -159,36 +168,30 @@ public class CardGameGUI extends JFrame implements ActionListener {
 				super.paintComponent(g);
 			}
 		};
-
+		
 		// If board object's class name follows the standard format
 		// of ...Board or ...board, use the prefix for the JFrame title
 		String className = board.getClass().getSimpleName();
-		int classNameLen = className.length();
-		int boardLen = "Board".length();
-		String boardStr = className.substring(classNameLen - boardLen);
-		if (boardStr.equals("Board") || boardStr.equals("board")) {
-			int titleLength = classNameLen - boardLen;
-			setTitle(className.substring(0, titleLength));
-		}
-
+		if(className.length()>5 && (className.endsWith("Board") || className.endsWith("Board")))
+			setTitle(className.substring(0, className.length()-5));
+		
 		// Calculate number of rows of cards (5 cards per row)
 		// and adjust JFrame height if necessary
 		int numCardRows = (board.size() + 4) / 5;
 		int height = DEFAULT_HEIGHT;
-		if (numCardRows > 2) {
+		if (numCardRows > 2)
 			height += (numCardRows - 2) * LAYOUT_HEIGHT_INC;
-		}
-
+		
 		this.setSize(new Dimension(DEFAULT_WIDTH, height));
 		panel.setLayout(null);
 		panel.setPreferredSize(
-			new Dimension(DEFAULT_WIDTH - 20, height - 20));
+				new Dimension(DEFAULT_WIDTH - 20, height - 20));
 		displayCards = new JLabel[board.size()];
 		for (int k = 0; k < board.size(); k++) {
 			displayCards[k] = new JLabel();
 			panel.add(displayCards[k]);
 			displayCards[k].setBounds(cardCoords[k].x, cardCoords[k].y,
-										CARD_WIDTH, CARD_HEIGHT);
+					CARD_WIDTH, CARD_HEIGHT);
 			displayCards[k].addMouseListener(new MyMouseListener());
 			selections[k] = false;
 		}
@@ -197,21 +200,21 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		panel.add(replaceButton);
 		replaceButton.setBounds(BUTTON_LEFT, BUTTON_TOP, 100, 30);
 		replaceButton.addActionListener(this);
-
+		
 		restartButton = new JButton();
 		restartButton.setText("Restart");
 		panel.add(restartButton);
 		restartButton.setBounds(BUTTON_LEFT, BUTTON_TOP + BUTTON_HEIGHT_INC,
-										100, 30);
+				100, 30);
 		restartButton.addActionListener(this);
 		
 		//TODO Add a button to change card looks
-
+		
 		statusMsg = new JLabel(
-			board.deckSize() + " undealt cards remain.");
+				board.deckSize() + " undealt cards remain.");
 		panel.add(statusMsg);
 		statusMsg.setBounds(LABEL_LEFT, LABEL_TOP, 250, 30);
-
+		
 		winMsg = new JLabel();
 		winMsg.setBounds(LABEL_LEFT, LABEL_TOP + LABEL_HEIGHT_INC, 200, 30);
 		winMsg.setFont(new Font("SansSerif", Font.BOLD, 25));
@@ -219,7 +222,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		winMsg.setText("You win!");
 		panel.add(winMsg);
 		winMsg.setVisible(false);
-
+		
 		lossMsg = new JLabel();
 		lossMsg.setBounds(LABEL_LEFT, LABEL_TOP + LABEL_HEIGHT_INC, 200, 30);
 		lossMsg.setFont(new Font("SanSerif", Font.BOLD, 25));
@@ -227,23 +230,22 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		lossMsg.setText("Sorry, you lose.");
 		panel.add(lossMsg);
 		lossMsg.setVisible(false);
-
+		
 		totalsMsg = new JLabel("You've won " + totalWins
-			+ " out of " + totalGames + " games.");
+				+ " out of " + totalGames + " games.");
 		totalsMsg.setBounds(LABEL_LEFT, LABEL_TOP + 2 * LABEL_HEIGHT_INC,
-								  250, 30);
+				250, 30);
 		panel.add(totalsMsg);
-
-		if (!board.anotherPlayIsPossible()) {
+		
+		if (!board.anotherPlayIsPossible())
 			signalLoss();
-		}
-
+		
 		pack();
 		getContentPane().add(panel);
 		getRootPane().setDefaultButton(replaceButton);
 		panel.setVisible(true);
 	}
-
+	
 	/**
 	 * Deal with the user clicking on something other than a button or a card.
 	 */
@@ -251,7 +253,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		Toolkit t = panel.getToolkit();
 		t.beep();
 	}
-
+	
 	/**
 	 * Returns the image that corresponds to the input card.
 	 * Image names have the format "[Rank][Suit].GIF" or "[Rank][Suit]S.GIF",
@@ -263,18 +265,15 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 * @return String representation of the image
 	 */
 	private String imageFileName(Card c, boolean isSelected) {
-		String str = "cards/";
-		if (c == null) {
-			return "cards/back1.GIF";
-		}
-		str += c.rank() + c.suit();
-		if (isSelected) {
-			str += "S";
-		}
-		str += ".GIF";
+		if (c == null)
+			return "src/cards/backs/back1.GIF";
+		// constructs the String, example: "cards/styles/default/normal/acespades.GIF"
+		String str = "src/cards/styles/" + style + "/"
+				+ (isSelected ? "selected" : "normal")
+				+ "/" +  c.rank() + c.suit() + ".GIF";
 		return str;
 	}
-
+	
 	/**
 	 * Respond to a button click (on either the "Replace" button
 	 * or the "Restart" button).
@@ -322,7 +321,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 			return;
 		}
 	}
-
+	
 	/**
 	 * Display a win.
 	 */
@@ -332,7 +331,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		totalWins++;
 		totalGames++;
 	}
-
+	
 	/**
 	 * Display a loss.
 	 */
@@ -341,12 +340,12 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		lossMsg.setVisible(true);
 		totalGames++;
 	}
-
+	
 	/**
 	 * Receives and handles mouse clicks.  Other mouse events are ignored.
 	 */
 	private class MyMouseListener implements MouseListener {
-
+		
 		/**
 		 * Handle a mouse click on a card by toggling its "selected" property.
 		 * Each card is represented as a label.
@@ -363,28 +362,28 @@ public class CardGameGUI extends JFrame implements ActionListener {
 			}
 			signalError();
 		}
-
+		
 		/**
 		 * Ignore a mouse exited event.
 		 * @param e the mouse event.
 		 */
 		public void mouseExited(MouseEvent e) {
 		}
-
+		
 		/**
 		 * Ignore a mouse released event.
 		 * @param e the mouse event.
 		 */
 		public void mouseReleased(MouseEvent e) {
 		}
-
+		
 		/**
 		 * Ignore a mouse entered event.
 		 * @param e the mouse event.
 		 */
 		public void mouseEntered(MouseEvent e) {
 		}
-
+		
 		/**
 		 * Ignore a mouse pressed event.
 		 * @param e the mouse event.
